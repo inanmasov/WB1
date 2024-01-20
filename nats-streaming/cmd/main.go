@@ -19,7 +19,7 @@ func main() {
 	defer sc.Close()
 
 	// Название канала, в который вы хотите отправить сообщение
-	path := "G:\\Стажировка\\nats-treaming\\models\\"
+	path := "G:\\Стажировка\\nats-streaming\\models\\"
 	channel := "myrad"
 
 	files, err := ioutil.ReadDir(path)

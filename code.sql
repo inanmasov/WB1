@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS payment (
 
 CREATE TABLE IF NOT EXISTS items (
     order_uid VARCHAR(255),
-    chrt_id INT,
+    chrt_id INT PRIMARY KEY,
     price INT,
     rid VARCHAR(255),
     name VARCHAR(255),
@@ -54,11 +54,8 @@ CREATE TABLE IF NOT EXISTS items (
     total_price INT,
     nm_id INT,
     brand VARCHAR(255),
-    status INT,
-    PRIMARY KEY (order_uid, chrt_id),
-    FOREIGN KEY (order_uid) REFERENCES orders (order_uid)
+    status INT
 );
-
 
 
 -- Insert into orders table
