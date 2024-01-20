@@ -1,0 +1,62 @@
+{
+    "order_uid": "b563feb7b2b84b6test123",
+    "track_number": "WBILMTESTTRACKqwe",
+    "entry": "WBIL1",
+    "delivery": {
+      "name": "Test Testov qwe",
+      "phone": "+19720000000",
+      "zip": "26398092",
+      "city": "Kiryat Mozkin3",
+      "address": "Ploshad Mira 152",
+      "region": "Kraiote",
+      "email": "test1@gmail.com"
+    },
+    "payment": {
+      "transaction": "b563feb7b2b84b6test123",
+      "request_id": "",
+      "currency": "USD",
+      "provider": "wbpay",
+      "amount": 18171,
+      "payment_dt": 164,
+      "bank": "alpha123",
+      "delivery_cost": 15001,
+      "goods_total": 3173,
+      "custom_fee": 0
+    },
+    "items": [
+      {
+        "chrt_id": 1234,
+        "track_number": "WBILMTESTTRACKqwe",
+        "price": 453,
+        "rid": "ab4219087a764ae0btest123",
+        "name": "Mascaras1",
+        "sale": 30,
+        "size": "0",
+        "total_price": 317,
+        "nm_id": 2389212,
+        "brand": "Vivienne Sabo123",
+        "status": 202
+      },
+      {
+        "chrt_id": 12345,
+        "track_number": "WBILMTESTTRACKasd",
+        "price": 4531,
+        "rid": "ab4219087a764ae0btest123a",
+        "name": "Mascaras1s",
+        "sale": 30,
+        "size": "01",
+        "total_price": 3171,
+        "nm_id": 23892122,
+        "brand": "Vivienne Sabo1233",
+        "status": 202
+      }
+    ],
+    "locale": "en",
+    "internal_signature": "",
+    "customer_id": "test",
+    "delivery_service": "meest",
+    "shardkey": "9",
+    "sm_id": 99,
+    "date_created": "2021-11-26T06:22:19Z",
+    "oof_shard": "1"
+  }
