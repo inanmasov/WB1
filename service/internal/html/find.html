@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find order</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        /* Стили для всплывающего сообщения */
+        #successMessage {
+            display: none;
+            color: green;
+            background: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Send ID to Server</h1>
+
+    <form id="idForm">
+        <label for="userId">Enter order ID:</label>
+        <input type="text" id="userId" name="userId" required>
+        <button type="button" onclick="sendRequest()">Send ID</button>
+    </form>
+
+    <div id="successMessage"></div>
+
+    <script>
+        function sendRequest() {
+            // Получение значения id из формы
+            var userId = document.getElementById('userId').value;
+
+            // Создание объекта XMLHttpRequest
+            var xhr = new XMLHttpRequest();
+
+            // Настройка запроса
+            xhr.open('POST', '/order', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            // Определение обработчика события завершения запроса
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // Обработка успешного ответа от сервера
+                    console.log('Request successful:', xhr.responseText);
+                    // Показываем сообщение об успешной отправке
+                    var successMessage = document.getElementById('successMessage');
+                    successMessage.textContent = 'Text successfully sent!';
+                    successMessage.style.display = 'block';
+
+                    // Задаем таймер на скрытие сообщения через 2 секунды
+                    setTimeout(function() {
+                        successMessage.style.display = 'none';
+                    }, 2000);
+                } else {
+                    // Обработка ошибки
+                    console.error('Request failed:', xhr.status, xhr.statusText);
+                }
+            };
+
+            // Подготовка данных для отправки на сервер (в данном случае, отправляем id)
+            var formData = encodeURIComponent(userId);
+
+            // Отправка запроса на сервер
+            xhr.send(formData);
+        }
+    </script>
+
+</body>
+</html>
