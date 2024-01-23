@@ -32,7 +32,7 @@ func Initialize() (*Database, error) {
 	return &Database{db: db}, nil
 }
 
-func (db *Database) GetDatabase(id string) error {
+func (db *Database) GetDatabase(id string) (model.OrderDetails, error) {
 	query := `
 		SELECT 
 			o.order_uid, o.track_number, o.entry, o.locale, o.internal_signature,
@@ -54,7 +54,7 @@ func (db *Database) GetDatabase(id string) error {
 	rows, err := db.db.Query(query, id)
 	if err != nil {
 		fmt.Println("Error executing query:", err)
-		return err
+		return model.OrderDetails{}, err
 	}
 	defer rows.Close()
 
@@ -79,7 +79,7 @@ func (db *Database) GetDatabase(id string) error {
 
 		if err != nil {
 			fmt.Println("Error scanning row:", err)
-			return err
+			return model.OrderDetails{}, err
 		}
 
 		orderDetails.Items = append(orderDetails.Items, item)
@@ -87,12 +87,10 @@ func (db *Database) GetDatabase(id string) error {
 
 	if err := rows.Err(); err != nil {
 		fmt.Println("Error iterating over rows:", err)
-		return err
+		return model.OrderDetails{}, err
 	}
 
-	// Теперь у вас есть данные в структуре OrderDetails
-	fmt.Printf("%+v\n", orderDetails)
-	return nil
+	return orderDetails, nil
 }
 
 func (db *Database) SendingDatabase(orderDetails model.OrderDetails) error {

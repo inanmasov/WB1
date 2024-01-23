@@ -7,6 +7,7 @@ import (
 )
 
 func RegisterRoutes() {
-	http.HandleFunc("/order", handler.OrdersHandler)
 	http.HandleFunc("/", handler.HealthCheckHandler)
+	http.HandleFunc("/order", handler.OrdersHandler)
+	http.HandleFunc("/view", handler.OrderView)
 }

@@ -23,15 +23,13 @@
 </head>
 <body>
 
-    <h1>Send ID to Server</h1>
+    <h1>Send ID order</h1>
 
     <form id="idForm">
-        <label for="userId">Enter order ID:</label>
+        <label for="userId">Enter ID:</label>
         <input type="text" id="userId" name="userId" required>
         <button type="button" onclick="sendRequest()">Send ID</button>
     </form>
-
-    <div id="successMessage"></div>
 
     <script>
         function sendRequest() {
@@ -50,18 +48,6 @@
                 if (xhr.status >= 200 && xhr.status < 300) {
                     // Обработка успешного ответа от сервера
                     console.log('Request successful:', xhr.responseText);
-                    // Показываем сообщение об успешной отправке
-                    var successMessage = document.getElementById('successMessage');
-                    successMessage.textContent = 'Text successfully sent!';
-                    successMessage.style.display = 'block';
-
-                    // Задаем таймер на скрытие сообщения через 2 секунды
-                    setTimeout(function() {
-                        successMessage.style.display = 'none';
-                    }, 2000);
-                } else {
-                    // Обработка ошибки
-                    console.error('Request failed:', xhr.status, xhr.statusText);
                 }
             };
 

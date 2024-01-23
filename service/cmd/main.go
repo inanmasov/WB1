@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
+	"example.com/service/service/internal/cached"
 	database "example.com/service/service/internal/database"
 	model "example.com/service/service/internal/models"
 	reg "example.com/service/service/internal/transport/router"
@@ -15,7 +17,8 @@ import (
 )
 
 func main() {
-
+	// Cache init
+	//cacheManager := cached.NewCache(1*time.Hour, 24*time.Hour)
 	// Подключение к серверу NATS Streaming
 	sc, err := stan.Connect("test-cluster", "publisher-client", stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
@@ -26,8 +29,11 @@ func main() {
 	// Название канала, на который вы хотите подписаться
 	channel := "myrad"
 
+	var wg sync.WaitGroup
+
 	// Функция, которая будет вызвана при получении сообщения
 	handler := func(msg *stan.Msg) {
+		defer wg.Done()
 
 		var order model.OrderDetails
 
@@ -41,20 +47,25 @@ func main() {
 		}
 		defer db.Close()
 
-		if err := db.SendingDatabase(order); err != nil {
-			log.Fatal(err)
-		}
+		key := order.OrderUID
+		cached.GlobalCacheManager.Cache.Set(key, order, -1)
+		//if err := db.SendingDatabase(order); err != nil {
+		//	log.Fatal(err)
+		//}
 	}
 
 	// Подписка на канал
-	subscription, err := sc.Subscribe(channel, handler, stan.DeliverAllAvailable())
+	subscription, err := sc.Subscribe(channel, func(msg *stan.Msg) {
+		wg.Add(1)
+		go handler(msg)
+	}, stan.DeliverAllAvailable())
+
 	if err != nil {
 		log.Fatalf("Ошибка подписки на канал: %v", err)
 	}
 	defer subscription.Unsubscribe()
-
 	log.Printf("Подписан на канал %s", channel)
-	time.Sleep(3 * time.Second)
+	time.Sleep(time.Second)
 
 	reg.RegisterRoutes()
 
