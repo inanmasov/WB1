@@ -31,6 +31,8 @@ func main() {
 
 	var wg sync.WaitGroup
 
+	flag := cached.InitCacheDB()
+
 	// Функция, которая будет вызвана при получении сообщения
 	handler := func(msg *stan.Msg) {
 		defer wg.Done()
@@ -47,11 +49,14 @@ func main() {
 		}
 		defer db.Close()
 
-		key := order.OrderUID
-		cached.GlobalCacheManager.Cache.Set(key, order, -1)
-		//if err := db.SendingDatabase(order); err != nil {
-		//	log.Fatal(err)
-		//}
+		if !flag {
+			key := order.OrderUID
+			cached.GlobalCacheManager.Cache.Set(key, order, -1)
+
+			if err := db.SendingDatabase(order); err != nil {
+				log.Fatal(err)
+			}
+		}
 	}
 
 	// Подписка на канал

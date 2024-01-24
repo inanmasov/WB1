@@ -35,33 +35,14 @@
     </tr>
     <tr>
         <td>Order UID</td>
-        <td id="orderUid"></td>
+        <td id="orderUid">{{.OrderUID}}</td>
     </tr>
     <tr>
         <td>Track Number</td>
-        <td id="trackNumber"></td>
+        <td id="trackNumber">{{.TrackNumber}}</td>
     </tr>
     <!-- Add more rows for other fields as needed -->
 </table>
-
-<script>
-    // Sample data for OrderDetails
-    var orderDetails = {
-        "order_uid": "123456",
-        "track_number": "ABC123",
-        // Add sample data for other fields here
-    };
-
-    // Function to set the text content of an HTML element by ID
-    function setElementText(id, text) {
-        document.getElementById(id).textContent = text;
-    }
-
-    // Set values for each field in the table
-    setElementText("orderUid", orderDetails.order_uid);
-    setElementText("trackNumber", orderDetails.track_number);
-    // Set values for other fields as needed
-</script>
 
 </body>
 </html>

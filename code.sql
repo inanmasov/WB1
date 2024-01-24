@@ -56,24 +56,3 @@ CREATE TABLE IF NOT EXISTS items (
     brand VARCHAR(255),
     status INT
 );
-
-
--- Insert into orders table
-INSERT INTO orders (order_uid, track_number, entry, locale, internal_signature, customer_id, delivery_service, shardkey, sm_id, date_created, oof_shard)
-VALUES ('b563feb7b2b84b6test123', 'WBILMTESTTRACKqwe', 'WBIL1', 'en', '', 'test', 'meest', '9', 99, '2021-11-26T06:22:19Z', '1');
-
--- Insert into delivery_info table
-INSERT INTO delivery (order_uid, name, phone, zip, city, address, region, email)
-VALUES ('b563feb7b2b84b6test123', 'Test Testov qwe', '+19720000000', '26398092', 'Kiryat Mozkin3', 'Ploshad Mira 152', 'Kraiote', 'test1@gmail.com');
-
--- Insert into payment_info table
-INSERT INTO payment (order_uid, transaction, request_id, currency, provider, amount, payment_dt, bank, delivery_cost, goods_total, custom_fee)
-VALUES ('b563feb7b2b84b6test123', 'b563feb7b2b84b6test123', '', 'USD', 'wbpay', 18171, 16379077272, 'alpha123', 15001, 3173, 0);
-
--- Insert into order_items table (first item)
-INSERT INTO items (order_uid, chrt_id, price, rid, name, sale, size, total_price, nm_id, brand, status)
-VALUES ('b563feb7b2b84b6test123', 1234, 453, 'ab4219087a764ae0btest123', 'Mascaras1', 30, '0', 317, 2389212, 'Vivienne Sabo123', 202);
-
--- Insert into order_items table (second item)
-INSERT INTO items (order_uid, chrt_id, price, rid, name, sale, size, total_price, nm_id, brand, status)
-VALUES ('b563feb7b2b84b6test123', 12345, 4531, 'ab4219087a764ae0btest123a', 'Mascaras1s', 30, '01', 3171, 23892122, 'Vivienne Sabo1233', 202);

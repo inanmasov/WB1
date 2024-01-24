@@ -3,11 +3,9 @@ package handler
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
-	cached "example.com/service/service/internal/cached"
-	database "example.com/service/service/internal/database"
+	"example.com/service/service/internal/cached"
 	_ "github.com/lib/pq"
 )
 
@@ -33,22 +31,11 @@ func postOrder(w http.ResponseWriter, r *http.Request) {
 
 	// Закрытие тела запроса, чтобы избежать утечек памяти
 	defer r.Body.Close()
-
-	db, err := database.Initialize()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	//order, err := db.GetDatabase(string(body))
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-
-	fmt.Println(cached.GlobalCacheManager.Cache.Get(string(body)))
+	cached.GlobalCacheManager.Cache.Set("id", string(body), -1)
 }
 
 func OrderView(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(12312312)
 	// Чтение HTML из файла
 	htmlContent, err := ioutil.ReadFile("G:\\Стажировка\\service\\internal\\html\\order.html")
 	if err != nil {

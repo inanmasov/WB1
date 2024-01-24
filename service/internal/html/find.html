@@ -48,6 +48,8 @@
                 if (xhr.status >= 200 && xhr.status < 300) {
                     // Обработка успешного ответа от сервера
                     console.log('Request successful:', xhr.responseText);
+
+                    window.location.href = '/view';
                 }
             };
 

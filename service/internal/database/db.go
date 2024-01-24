@@ -32,6 +32,91 @@ func Initialize() (*Database, error) {
 	return &Database{db: db}, nil
 }
 
+func (db *Database) GetAllOrdersDatabase() ([]model.OrderDetails, error) {
+	query := `
+        SELECT 
+            o.order_uid, o.track_number, o.entry, o.locale, o.internal_signature,
+            o.customer_id, o.delivery_service, o.shardkey, o.sm_id, o.date_created,
+            o.oof_shard,
+            d.name as delivery_name, d.phone as delivery_phone, d.zip, d.city, d.address,
+            d.region, d.email,
+            p.transaction, p.request_id, p.currency, p.provider, p.amount, p.payment_dt,
+            p.bank, p.delivery_cost, p.goods_total, p.custom_fee
+        FROM orders o
+        LEFT JOIN delivery d ON o.order_uid = d.order_uid
+        LEFT JOIN payment p ON o.order_uid = p.order_uid
+    `
+
+	rows, err := db.db.Query(query)
+	if err != nil {
+		fmt.Println("Error executing query:", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ordDet []model.OrderDetails
+	var orderDetails model.OrderDetails
+
+	for rows.Next() {
+		err := rows.Scan(
+			&orderDetails.OrderUID, &orderDetails.TrackNumber, &orderDetails.Entry, &orderDetails.Locale,
+			&orderDetails.InternalSignature, &orderDetails.CustomerID, &orderDetails.DeliveryService,
+			&orderDetails.ShardKey, &orderDetails.SMID, &orderDetails.DateCreated, &orderDetails.OOFShard,
+			&orderDetails.Delivery.Name, &orderDetails.Delivery.Phone, &orderDetails.Delivery.Zip,
+			&orderDetails.Delivery.City, &orderDetails.Delivery.Address, &orderDetails.Delivery.Region,
+			&orderDetails.Delivery.Email, &orderDetails.Payment.Transaction, &orderDetails.Payment.RequestID,
+			&orderDetails.Payment.Currency, &orderDetails.Payment.Provider, &orderDetails.Payment.Amount,
+			&orderDetails.Payment.PaymentDt, &orderDetails.Payment.Bank, &orderDetails.Payment.DeliveryCost,
+			&orderDetails.Payment.GoodsTotal, &orderDetails.Payment.CustomFee,
+		)
+
+		if err != nil {
+			fmt.Println("Error scanning row:", err)
+			return []model.OrderDetails{}, err
+		}
+
+		ordDet = append(ordDet, orderDetails)
+	}
+
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows:", err)
+		return []model.OrderDetails{}, err
+	}
+
+	for i := 0; i < len(ordDet); i++ {
+		query := `
+        	SELECT 
+				chrt_id, price, rid, name, sale, size, total_price, nm_id, brand, status
+			FROM items
+			WHERE order_uid = $1
+    	`
+
+		rows, err := db.db.Query(query, ordDet[i].OrderUID)
+		if err != nil {
+			fmt.Println("Error executing query:", err)
+			return nil, err
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var item model.Item
+			err := rows.Scan(
+				&item.ChrtID, &item.Price, &item.RID, &item.Name, &item.Sale,
+				&item.Size, &item.TotalPrice, &item.NMID, &item.Brand, &item.Status,
+			)
+
+			if err != nil {
+				fmt.Println("Error scanning row:", err)
+				return []model.OrderDetails{}, err
+			}
+
+			ordDet[i].Items = append(ordDet[i].Items, item)
+		}
+	}
+
+	return ordDet, nil
+}
+
 func (db *Database) GetDatabase(id string) (model.OrderDetails, error) {
 	query := `
 		SELECT 
