@@ -38,7 +38,6 @@ func postOrder(w http.ResponseWriter, r *http.Request) {
 
 func OrderView(w http.ResponseWriter, r *http.Request) {
 	// Чтение HTML из файла
-	//htmlContent, err := ioutil.ReadFile("G:\\Стажировка\\service\\internal\\html\\order.html")
 	htmlContent, err := ioutil.ReadFile("internal\\html\\order.html")
 	if err != nil {
 		// Если произошла ошибка при чтении файла, возвращаем HTTP 500
@@ -79,7 +78,6 @@ func OrderView(w http.ResponseWriter, r *http.Request) {
 
 	if !flag {
 		// Чтение HTML из файла
-		//htmlContent, err := ioutil.ReadFile("G:\\Стажировка\\service\\internal\\html\\error.html")
 		htmlContent, err := ioutil.ReadFile("internal\\html\\error.html")
 		if err != nil {
 			// Если произошла ошибка при чтении файла, возвращаем HTTP 500
@@ -96,7 +94,6 @@ func OrderView(w http.ResponseWriter, r *http.Request) {
 
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	// Чтение HTML из файла
-	//htmlContent, err := ioutil.ReadFile("G:\\Стажировка\\service\\internal\\html\\find.html")
 	htmlContent, err := ioutil.ReadFile("internal\\html\\find.html")
 	if err != nil {
 		// Если произошла ошибка при чтении файла, возвращаем HTTP 500
