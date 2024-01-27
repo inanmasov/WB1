@@ -2,20 +2,13 @@ package cached
 
 import (
 	"log"
-	"sync"
 	"time"
 
 	database "example.com/service/service/internal/database"
 	"github.com/patrickmn/go-cache"
 )
 
-// CacheManager представляет собой менеджер кэша.
-type CacheManager struct {
-	Cache *cache.Cache
-	Mu    sync.Mutex
-}
-
-var GlobalCacheManager *CacheManager
+var GlobalCacheManager *cache.Cache
 
 func InitCacheDB() bool {
 	if GlobalCacheManager == nil {
@@ -37,7 +30,7 @@ func InitCacheDB() bool {
 		} else {
 			for i := 0; i < len(order); i++ {
 				key := order[i].OrderUID
-				GlobalCacheManager.Cache.Set(key, order[i], -1)
+				GlobalCacheManager.Set(key, order[i], -1)
 			}
 		}
 	}
@@ -45,8 +38,6 @@ func InitCacheDB() bool {
 }
 
 // NewCache создает новый CacheManager.
-func NewCache(defaultExpiration, cleanupInterval time.Duration) *CacheManager {
-	return &CacheManager{
-		Cache: cache.New(defaultExpiration, cleanupInterval),
-	}
+func NewCache(defaultExpiration, cleanupInterval time.Duration) *cache.Cache {
+	return cache.New(defaultExpiration, cleanupInterval)
 }

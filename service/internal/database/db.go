@@ -13,7 +13,7 @@ type Database struct {
 }
 
 func Initialize() (*Database, error) {
-	viper.AddConfigPath("service\\internal\\configs")
+	viper.AddConfigPath("internal\\configs")
 	viper.SetConfigName("config")
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
@@ -86,7 +86,7 @@ func (db *Database) GetAllOrdersDatabase() ([]model.OrderDetails, error) {
 	for i := 0; i < len(ordDet); i++ {
 		query := `
         	SELECT 
-				chrt_id, price, rid, name, sale, size, total_price, nm_id, brand, status
+				chrt_id, track_number, price, rid, name, sale, size, total_price, nm_id, brand, status
 			FROM items
 			WHERE order_uid = $1
     	`
@@ -101,7 +101,7 @@ func (db *Database) GetAllOrdersDatabase() ([]model.OrderDetails, error) {
 		for rows.Next() {
 			var item model.Item
 			err := rows.Scan(
-				&item.ChrtID, &item.Price, &item.RID, &item.Name, &item.Sale,
+				&item.ChrtID, &item.TrackNumber, &item.Price, &item.RID, &item.Name, &item.Sale,
 				&item.Size, &item.TotalPrice, &item.NMID, &item.Brand, &item.Status,
 			)
 
@@ -127,7 +127,7 @@ func (db *Database) GetDatabase(id string) (model.OrderDetails, error) {
 			d.region, d.email,
 			p.transaction, p.request_id, p.currency, p.provider, p.amount, p.payment_dt,
 			p.bank, p.delivery_cost, p.goods_total, p.custom_fee,
-			i.chrt_id, i.price, i.rid, i.name as item_name, i.sale, i.size,
+			i.chrt_id, i.track_number, i.price, i.rid, i.name as item_name, i.sale, i.size,
 			i.total_price, i.nm_id, i.brand, i.status
 		FROM orders o
 		LEFT JOIN delivery d ON o.order_uid = d.order_uid
@@ -157,7 +157,7 @@ func (db *Database) GetDatabase(id string) (model.OrderDetails, error) {
 			&orderDetails.Delivery.Email, &orderDetails.Payment.Transaction, &orderDetails.Payment.RequestID,
 			&orderDetails.Payment.Currency, &orderDetails.Payment.Provider, &orderDetails.Payment.Amount,
 			&orderDetails.Payment.PaymentDt, &orderDetails.Payment.Bank, &orderDetails.Payment.DeliveryCost,
-			&orderDetails.Payment.GoodsTotal, &orderDetails.Payment.CustomFee, &item.ChrtID, &item.Price,
+			&orderDetails.Payment.GoodsTotal, &orderDetails.Payment.CustomFee, &item.ChrtID, &item.TrackNumber, &item.Price,
 			&item.RID, &item.Name, &item.Sale, &item.Size, &item.TotalPrice, &item.NMID, &item.Brand,
 			&item.Status,
 		)
@@ -221,9 +221,9 @@ func (db *Database) SendingDatabase(orderDetails model.OrderDetails) error {
 	// Insert into Items table
 	for _, item := range orderDetails.Items {
 		_, err := tx.Exec(`
-			INSERT INTO Items (order_uid, chrt_id, price, rid, name, sale, size, total_price, nm_id, brand, status)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-			orderDetails.Order.OrderUID, item.ChrtID, item.Price, item.RID, item.Name, item.Sale, item.Size, item.TotalPrice, item.NMID, item.Brand, item.Status)
+			INSERT INTO Items (order_uid, chrt_id, track_number, price, rid, name, sale, size, total_price, nm_id, brand, status)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+			orderDetails.Order.OrderUID, item.ChrtID, item.TrackNumber, item.Price, item.RID, item.Name, item.Sale, item.Size, item.TotalPrice, item.NMID, item.Brand, item.Status)
 		if err != nil {
 			return err
 		}

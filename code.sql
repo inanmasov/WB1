@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS payment (
 
 CREATE TABLE IF NOT EXISTS items (
     order_uid VARCHAR(255),
+    track_number VARCHAR(255),
     chrt_id INT PRIMARY KEY,
     price INT,
     rid VARCHAR(255),

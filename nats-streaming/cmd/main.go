@@ -19,7 +19,7 @@ func main() {
 	defer sc.Close()
 
 	// Название канала, в который вы хотите отправить сообщение
-	path := "G:\\Стажировка\\nats-streaming\\models\\"
+	path := "models"
 	channel := "myrad"
 
 	files, err := ioutil.ReadDir(path)
@@ -27,7 +27,7 @@ func main() {
 		log.Fatal(err)
 	}
 	for _, v := range files {
-		msg, err := readJSON(path + v.Name())
+		msg, err := readJSON(path + "/" + v.Name())
 		if err != nil {
 			return
 		}
@@ -35,7 +35,7 @@ func main() {
 		if err = sc.Publish(channel, msg); err != nil {
 			log.Fatalf("Ошибка отправки сообщения: %v", err)
 		} else {
-			log.Printf("Сообщение успешно опубликовано в канале %s: %s", channel, msg)
+			log.Printf("Сообщение успешно опубликовано в канале %s", channel)
 			// Для того, чтобы NATS Streaming обработало сообщение
 			time.Sleep(1 * time.Second)
 		}

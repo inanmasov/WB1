@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница отсутствующего заказа</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .text-box {
+            display: inline-block;
+            border: 2px solid #333;
+            padding: 10px;
+            background-color: red;
+        }
+
+        .menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-weight: bold;
+        }
+
+        .menu a {
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <a href="/"><< BACK</a>
+    </div>
+    <div class="container">
+        <div class="text-box">
+            <p>Данного заказа нет</p>
+        </div>
+    </div>
+</body>
+</html>

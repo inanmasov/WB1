@@ -31,35 +31,46 @@
         <button type="button" onclick="sendRequest()">Send ID</button>
     </form>
 
-    <script>
-        function sendRequest() {
-            // Получение значения id из формы
-            var userId = document.getElementById('userId').value;
+   <script>
+    var requestSent = false; // Flag to track if the request has been sent
 
-            // Создание объекта XMLHttpRequest
-            var xhr = new XMLHttpRequest();
-
-            // Настройка запроса
-            xhr.open('POST', '/order', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-            // Определение обработчика события завершения запроса
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    // Обработка успешного ответа от сервера
-                    console.log('Request successful:', xhr.responseText);
-
-                    window.location.href = '/view';
-                }
-            };
-
-            // Подготовка данных для отправки на сервер (в данном случае, отправляем id)
-            var formData = encodeURIComponent(userId);
-
-            // Отправка запроса на сервер
-            xhr.send(formData);
+    function sendRequest() {
+        if (requestSent) {
+            console.log('Request already sent. Ignoring additional requests.');
+            return;
         }
-    </script>
+
+        // Получение значения id из формы
+        var userId = document.getElementById('userId').value;
+
+        // Создание объекта XMLHttpRequest
+        var xhr = new XMLHttpRequest();
+
+        // Настройка запроса
+        xhr.open('POST', '/order', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        // Определение обработчика события завершения запроса
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Обработка успешного ответа от сервера
+                console.log('Request successful:', xhr.responseText);
+
+                // Set the flag to true after successful request
+                requestSent = true;
+
+                // Redirect to '/view'
+                window.location.href = '/view';
+            }
+        };
+
+        // Подготовка данных для отправки на сервер (в данном случае, отправляем id)
+        var formData = encodeURIComponent(userId);
+
+        // Отправка запроса на сервер
+        xhr.send(formData);
+    }
+</script>
 
 </body>
 </html>

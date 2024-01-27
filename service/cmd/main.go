@@ -17,8 +17,6 @@ import (
 )
 
 func main() {
-	// Cache init
-	//cacheManager := cached.NewCache(1*time.Hour, 24*time.Hour)
 	// Подключение к серверу NATS Streaming
 	sc, err := stan.Connect("test-cluster", "publisher-client", stan.NatsURL("nats://localhost:4222"))
 	if err != nil {
@@ -51,7 +49,7 @@ func main() {
 
 		if !flag {
 			key := order.OrderUID
-			cached.GlobalCacheManager.Cache.Set(key, order, -1)
+			cached.GlobalCacheManager.Set(key, order, -1)
 
 			if err := db.SendingDatabase(order); err != nil {
 				log.Fatal(err)
@@ -74,7 +72,7 @@ func main() {
 
 	reg.RegisterRoutes()
 
-	viper.AddConfigPath("service\\internal\\configs")
+	viper.AddConfigPath("internal\\configs")
 	viper.SetConfigName("config")
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
